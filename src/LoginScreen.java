@@ -110,6 +110,13 @@ public class LoginScreen extends JPanel
     {
         JOptionPane.showMessageDialog(this, message);
     }
+    
+    public void reset(){
+    	userName.setText("");
+    	passWord.setText("");
+    	port.setText("3306");
+    	host.setText("localhost");
+    }
 
     private static final long serialVersionUID = 1L;
     private JTextField userName;
