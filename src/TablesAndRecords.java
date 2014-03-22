@@ -63,6 +63,4 @@ public class TablesAndRecords extends JPanel {
 	private JSplitPane splitPane;
 	private JList<String> list;
 	private DefaultListModel<String> tableList;
-	private String columnHeaders[];
-	private String tableContent[][];
 }

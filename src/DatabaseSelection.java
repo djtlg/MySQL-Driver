@@ -12,12 +12,19 @@ public class DatabaseSelection extends JPanel {
 		addListBox();
 		addNextButton();
 		addCancelButton();
-		addNewButton();
-		addRemoveButton();
 	}
 
 	private void addListBox() {
 		databaseList = new DefaultListModel<String>();
+		{
+			lblNewLabel = new JLabel("Databases");
+			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+			gbc_lblNewLabel.gridwidth = 2;
+			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel.gridx = 1;
+			gbc_lblNewLabel.gridy = 0;
+			add(lblNewLabel, gbc_lblNewLabel);
+		}
 		list = new JList<String>();
 		list.setSelectionMode(0);
 		list.setVisibleRowCount(-1);
@@ -32,27 +39,6 @@ public class DatabaseSelection extends JPanel {
 //		databaseListContainer = new JScrollPane(list);
 //		add(databaseListContainer, listConstraints);
 		add(list, listConstraints);
-	}
-
-	private void addNewButton() {
-		newDatabaseButton = new JButton("New Database");
-		GridBagConstraints newButtonConstrains = new GridBagConstraints();
-		newButtonConstrains.insets = new Insets(0, 0, 5, 0);
-		newButtonConstrains.fill = GridBagConstraints.HORIZONTAL;
-		newButtonConstrains.gridwidth = 2;
-		newButtonConstrains.gridx = 1;
-		newButtonConstrains.gridy = 3;
-		add(newDatabaseButton, newButtonConstrains);
-	}
-
-	private void addRemoveButton() {
-		removeButton = new JButton("Remove Database");
-		GridBagConstraints removeButtonConstrains = new GridBagConstraints();
-		removeButtonConstrains.fill = GridBagConstraints.HORIZONTAL;
-		removeButtonConstrains.gridwidth = 2;
-		removeButtonConstrains.gridx = 1;
-		removeButtonConstrains.gridy = 4;
-		add(removeButton, removeButtonConstrains);
 	}
 
 	private void addNextButton() {
@@ -97,14 +83,6 @@ public class DatabaseSelection extends JPanel {
 		cancelButton.addActionListener(listenForCancelButton);
 	}
 
-	public void removeButtonListener(ActionListener listenForRemoveButton) {
-		removeButton.addActionListener(listenForRemoveButton);
-	}
-
-	public void newButtonListener(ActionListener listenForNewDbButton) {
-		newDatabaseButton.addActionListener(listenForNewDbButton);
-	}
-
 	public void displayError(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
@@ -115,6 +93,5 @@ public class DatabaseSelection extends JPanel {
 	//private JScrollPane databaseListContainer;
 	private JButton nextButton;
 	private JButton cancelButton;
-	private JButton newDatabaseButton;
-	private JButton removeButton;
+	private JLabel lblNewLabel;
 }

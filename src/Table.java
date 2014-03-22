@@ -10,10 +10,10 @@ public class Table
         this.con = con;
     }
 
-    void addTable(String tableName, Map columns)
+    void addTable(String tableName, Map<String, String> columns)
         throws SQLException
     {
-        Iterator it = columns.keySet().iterator();
+        Iterator<String> it = columns.keySet().iterator();
         stmt = con.createStatement();
         String sql = (new StringBuilder("create table ")).append(tableName).append(" (").toString();
         while(it.hasNext()) 
@@ -47,10 +47,10 @@ public class Table
         return tables;
     }
 
-    void addColumn(String tableName, Map columns)
+    void addColumn(String tableName, Map<String,String> columns)
         throws SQLException
     {
-        Iterator it = columns.keySet().iterator();
+        Iterator<String> it = columns.keySet().iterator();
         String sql = (new StringBuilder("alter table ")).append(tableName).append(" add (").toString();
         while(it.hasNext()) 
         {
@@ -66,10 +66,10 @@ public class Table
         stmt.close();
     }
 
-    void modifyColumn(String tableName, Map columns)
+    void modifyColumn(String tableName, Map<String,String> columns)
         throws SQLException
     {
-        Iterator it = columns.keySet().iterator();
+        Iterator<String> it = columns.keySet().iterator();
         String sql = (new StringBuilder("alter table ")).append(tableName).append(" modify ").toString();
         while(it.hasNext()) 
         {
@@ -84,10 +84,10 @@ public class Table
         stmt.close();
     }
 
-    void removeColumn(String tableName, ArrayList columns)
+    void removeColumn(String tableName, ArrayList<String> columns)
         throws SQLException
     {
-        Iterator it = columns.iterator();
+        Iterator<String> it = columns.iterator();
         String sql = (new StringBuilder("alter table ")).append(tableName).append(" drop column ").toString();
         while(it.hasNext()) 
         {

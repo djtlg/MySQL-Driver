@@ -5,29 +5,37 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
 
 public class GUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private static LoginScreen login;
-	private static DatabaseSelection dbSelector;
-	private static TablesAndRecords tablesAndRecords;
+	private LoginScreen login;
+	private DatabaseSelection dbSelector;
+	private TablesAndRecords tablesAndRecords;
 	private Connection con;
 	private ConnectionManager conMgr;
-	private static CardLayout layout;
-	private static String host;
-	private static String port;
-	private static String userName;
-	private static char passWord[];
-	private static Database database;
-	private static Table table;
-	private static Record record;
-
+	private CardLayout layout;
+	private String host;
+	private String port;
+	private String userName;
+	private char passWord[];
+	private Database database;
+	private Table table;
+	private Record record;
+	private JMenuBar menuBar;
+	private JMenu edit, advanced;
+	private JMenuItem addDatabase, removeDatabase, addTable, removeTable, createQuery;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -45,6 +53,7 @@ public class GUI extends JFrame {
 		setDefaultCloseOperation(3);
 		setBounds(100, 100, 450, 300);
 		setLocationRelativeTo(null);
+		createMenuBar();
 		contentPane = new JPanel();
 		layout = new CardLayout();
 		contentPane.setLayout(layout);
@@ -52,8 +61,6 @@ public class GUI extends JFrame {
 		login.loginListener(new LoginListener());
 		dbSelector = new DatabaseSelection();
 		dbSelector.nextButtonListener(new NextButtonListener());
-		dbSelector.removeButtonListener(new RemoveButtonListener());
-		dbSelector.newButtonListener(new NewButtonListener());
 		dbSelector.cancelButtonListener(new CancelButtonListener());
 		tablesAndRecords = new TablesAndRecords();
 		tablesAndRecords.tableListListener(new TableListListener());
@@ -62,6 +69,99 @@ public class GUI extends JFrame {
 		contentPane.add(tablesAndRecords, "tablesAndRecords");
 		setContentPane(contentPane);
 		layout.show(contentPane, "login");
+	}
+	
+	private void createMenuBar(){
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		edit = new JMenu("Edit");
+		advanced = new JMenu("Advanced");
+	}
+	
+	private void createDbSelectorEditMenu(){
+		edit.removeAll();
+		menuBar.add(edit);
+		addDatabase = new JMenuItem("New Database");
+		addDatabase.addActionListener(new MenuBarActionListener());
+		edit.add(addDatabase);
+		removeDatabase = new JMenuItem("Remove Database");
+		removeDatabase.addActionListener(new MenuBarActionListener());
+		edit.add(removeDatabase);
+	}
+	
+	private void createEditMenuInTablesAndRecords(){
+		edit.removeAll();
+		menuBar.add(edit);
+		addTable = new JMenuItem("New Table");
+		addTable.addActionListener(new MenuBarActionListener());
+		edit.add(addTable);
+		removeTable = new JMenuItem("Remove Table");
+		removeTable.addActionListener(new MenuBarActionListener());
+		edit.add(removeTable);
+	}
+	private void createAdvancedMenu(){
+		menuBar.add(advanced);
+		createQuery = new JMenuItem("Create Query");
+		createQuery.addActionListener(new MenuBarActionListener());
+		advanced.add(createQuery);
+	}
+	
+	private class MenuBarActionListener implements ActionListener{
+
+		public void actionPerformed(ActionEvent arg0) {
+			if (arg0.getSource() == addDatabase){
+				try {
+					String newDbName;
+					do{
+						newDbName = JOptionPane
+								.showInputDialog("Please Enter Database Name: ");
+					if (newDbName.isEmpty()) {
+						dbSelector.displayError("Database name can not be empty.");
+					}
+					}while(newDbName.isEmpty());
+					database.addDB(newDbName);
+					dbSelector.setDatabaseList(database.getDBs());
+					JOptionPane.showMessageDialog(null, "Database \"" + newDbName + "\" succesfully created.");
+					} catch (SQLException e) {
+					dbSelector.displayError(e.getMessage());
+				}
+			}
+			if (arg0.getSource() == removeDatabase){
+				try { 
+					if(dbSelector.getSelection() == null)
+						JOptionPane.showMessageDialog(null, "Please select a database", "Error ...", JOptionPane.ERROR_MESSAGE);
+					else if(JOptionPane.showConfirmDialog (null,"YOU ARE ABOUT TO DELETE THE DATABASE \""+ dbSelector.getSelection() +"\" WITH ALL OF IT'S DATA." +"\nAre you sure?","WARNING", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+						database.removeDB(dbSelector.getSelection());
+						dbSelector.setDatabaseList(database.getDBs());
+					}
+				} catch (SQLException e) {
+					dbSelector.displayError(e.getMessage());
+				}
+			}
+			if (arg0.getSource() == addTable){
+				System.out.println("Add Table");
+			}
+			if (arg0.getSource() == removeTable) {
+				try {
+					if(tablesAndRecords.getTableChoice() == null)
+						JOptionPane.showMessageDialog(null, "Please select a table", "Error ...", JOptionPane.ERROR_MESSAGE);
+					else if (JOptionPane.showConfirmDialog(null,
+							"YOU ARE ABOUT TO DELETE THE TABLE \""
+									+ tablesAndRecords.getTableChoice()
+									+ "\" WITH ALL OF IT'S DATA."
+									+ "\nAre you sure?", "WARNING",
+							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+						table.removeTable(tablesAndRecords.getTableChoice());
+					}
+				} catch (SQLException e) {
+					tablesAndRecords.displayError(e.getMessage());
+				}
+			}
+			if (arg0.getSource() == createQuery){
+				System.out.println("Create Query");
+			}
+		}
+		
 	}
 	
 	private class LoginListener implements ActionListener {
@@ -77,6 +177,7 @@ public class GUI extends JFrame {
 				database = new Database(con);
 				dbSelector.setDatabaseList(database.getDBs());
 				layout.show(contentPane, "dbSelector");
+				createDbSelectorEditMenu();
 			} catch (ClassNotFoundException | SQLException e) {
 				login.displayError(e.getMessage());
 			}
@@ -92,42 +193,11 @@ public class GUI extends JFrame {
 				table = new Table(con);
 				tablesAndRecords.setTableList(table.getTables());
 				layout.show(contentPane, "tablesAndRecords");
+				//maximize the window
+				setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+				createEditMenuInTablesAndRecords();
+				createAdvancedMenu();
 			} catch (SQLException e) {
-				dbSelector.displayError(e.getMessage());
-			}
-		}
-	}
-	
-	private class RemoveButtonListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent arg0) {
-			try { 
-				if(JOptionPane.showConfirmDialog (null,"YOU ARE ABOUT TO DELETE THE DATABASE \""+ dbSelector.getSelection() +"\" WITH ALL OF IT'S DATA." +"\nAre you sure?","WARNING", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-					database.removeDB(dbSelector.getSelection());
-					dbSelector.setDatabaseList(database.getDBs());
-				}
-			} catch (SQLException e) {
-				dbSelector.displayError(e.getMessage());
-			}
-		}
-	}
-	
-	private class NewButtonListener implements ActionListener {
-
-		public void actionPerformed(ActionEvent arg0) {
-			try {
-				String newDbName;
-				do{
-					newDbName = JOptionPane
-							.showInputDialog("Please Enter Database Name: ");
-				if (newDbName.isEmpty()) {
-					dbSelector.displayError("Database name can not be empty.");
-				}
-				}while(newDbName.isEmpty());
-				database.addDB(newDbName);
-				dbSelector.setDatabaseList(database.getDBs());
-				JOptionPane.showMessageDialog(null, "Database \"" + newDbName + "\" succesfully created.");
-				} catch (SQLException e) {
 				dbSelector.displayError(e.getMessage());
 			}
 		}
