@@ -21,9 +21,11 @@ public class TablesAndRecords extends JPanel {
 	}
 
 	public void setTableList(ArrayList<String> tableList) {
+		this.tableList.removeAllElements();
 		tableList.trimToSize();
 		for (int i = 0; i < tableList.size(); i++)
-			this.tableList.addElement((String) tableList.get(i));
+			this.tableList.addElement(tableList.get(i));
+		list.setModel(this.tableList);
 		list.setSelectedIndex(0);
 	}
 

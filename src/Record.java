@@ -10,11 +10,11 @@ public class Record
         this.con = con;
     }
 
-    void addRecord(String tableName, Map columnsAndValues)
+    void addRecord(String tableName, Map<String,String> columnsAndValues)
         throws SQLException
     {
-        Iterator it1 = columnsAndValues.keySet().iterator();
-        Iterator it2 = columnsAndValues.keySet().iterator();
+        Iterator<String> it1 = columnsAndValues.keySet().iterator();
+        Iterator<String> it2 = columnsAndValues.keySet().iterator();
         String sql = (new StringBuilder("insert into ")).append(tableName).append(" (").toString();
         while(it1.hasNext()) 
         {
@@ -39,10 +39,10 @@ public class Record
         con.close();
     }
 
-    void removeRecord(String tableName, Map columnsAndValues)
+    void removeRecord(String tableName, Map<String,String> columnsAndValues)
         throws SQLException
     {
-        Iterator it = columnsAndValues.keySet().iterator();
+        Iterator<String> it = columnsAndValues.keySet().iterator();
         String sql = (new StringBuilder("delete from ")).append(tableName).append(" where ").toString();
         while(it.hasNext()) 
         {
