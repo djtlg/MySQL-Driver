@@ -7,7 +7,7 @@ public class DatabaseSelection extends JPanel {
 
 	public DatabaseSelection() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{20, 76, 71};
+		gridBagLayout.columnWidths = new int[] { 20, 76, 71 };
 		setLayout(gridBagLayout);
 		addListBox();
 		addNextButton();
@@ -16,18 +16,15 @@ public class DatabaseSelection extends JPanel {
 
 	private void addListBox() {
 		databaseList = new DefaultListModel<String>();
-		{
-			lblNewLabel = new JLabel("Databases");
-			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-			gbc_lblNewLabel.gridwidth = 2;
-			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-			gbc_lblNewLabel.gridx = 1;
-			gbc_lblNewLabel.gridy = 0;
-			add(lblNewLabel, gbc_lblNewLabel);
-		}
+		lblNewLabel = new JLabel("Databases");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.gridwidth = 2;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 1;
+		gbc_lblNewLabel.gridy = 0;
+		add(lblNewLabel, gbc_lblNewLabel);
 		list = new JList<String>();
-		list.setSelectionMode(0);
-		list.setVisibleRowCount(-1);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		GridBagConstraints listConstraints = new GridBagConstraints();
 		listConstraints.insets = new Insets(0, 0, 5, 0);
 		listConstraints.anchor = 10;
@@ -36,7 +33,8 @@ public class DatabaseSelection extends JPanel {
 		listConstraints.gridy = 1;
 		listConstraints.gridwidth = 2;
 		listConstraints.insets.set(0, 0, 5, 0);
-		add(list, listConstraints);
+		JScrollPane scrollPane = new JScrollPane(list);
+		add(scrollPane,listConstraints);
 	}
 
 	private void addNextButton() {
@@ -88,7 +86,7 @@ public class DatabaseSelection extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JList<String> list;
 	private DefaultListModel<String> databaseList;
-	//private JScrollPane databaseListContainer;
+	// private JScrollPane databaseListContainer;
 	private JButton nextButton;
 	private JButton cancelButton;
 	private JLabel lblNewLabel;

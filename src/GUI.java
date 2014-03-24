@@ -22,6 +22,7 @@ public class GUI extends JFrame {
 	private LoginScreen login;
 	private DatabaseSelection dbSelector;
 	private TablesAndRecords tablesAndRecords;
+	private QueryDisplay queryDisplay;
 	private Connection con;
 	private ConnectionManager conMgr;
 	private CardLayout layout;
@@ -79,9 +80,11 @@ public class GUI extends JFrame {
 		tablesAndRecords = new TablesAndRecords();
 		tablesAndRecords.tableListListener(new TableListListener());
 		tablesAndRecords.backButtonListener(new BackButtonListener());
+		queryDisplay = new QueryDisplay();
 		contentPane.add(login, "login");
 		contentPane.add(dbSelector, "dbSelector");
 		contentPane.add(tablesAndRecords, "tablesAndRecords");
+		contentPane.add(queryDisplay, "queryDisplay");
 		setContentPane(contentPane);
 		layout.show(contentPane, "login");
 	}
@@ -196,8 +199,20 @@ public class GUI extends JFrame {
 				}
 			}
 			if (arg0.getSource() == createQuery) {
-				System.out.println(JOptionPane.showInputDialog("Enter sth"));
-				System.out.println("Create Query");
+				try {
+					QueryDialog queryDialog = new QueryDialog();
+					if (!queryDialog.getQuery().isEmpty()) {
+						Query query = new Query(con);
+						query.createQuery(queryDialog.getQuery());
+						queryDisplay.setContent(query.getQueryColumnNames(),
+								query.getQueryResults());
+						queryDisplay
+								.backButtonListener(new BackButtonListener());
+						layout.show(contentPane, "queryDisplay");
+					}
+				} catch (SQLException e) {
+					tablesAndRecords.displayError(e.getMessage());
+				}
 			}
 		}
 
@@ -257,6 +272,7 @@ public class GUI extends JFrame {
 			database = null;
 			login.reset();
 			layout.show(contentPane, "login");
+			menuBar.removeAll();
 		}
 
 	}
@@ -265,7 +281,7 @@ public class GUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			layout.show(contentPane, "dbSelector");
+			layout.previous(contentPane);
 		}
 	}
 
