@@ -36,8 +36,6 @@ public class DatabaseSelection extends JPanel {
 		listConstraints.gridy = 1;
 		listConstraints.gridwidth = 2;
 		listConstraints.insets.set(0, 0, 5, 0);
-//		databaseListContainer = new JScrollPane(list);
-//		add(databaseListContainer, listConstraints);
 		add(list, listConstraints);
 	}
 

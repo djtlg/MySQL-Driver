@@ -1,4 +1,6 @@
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -18,6 +20,7 @@ public class TablesAndRecords extends JPanel {
 		splitPane.setResizeWeight(0.2);
 		splitPane.setLeftComponent(tableListScrollPane);
 		add(splitPane, "Center");
+		setTopPanel();
 	}
 
 	public void setTableList(ArrayList<String> tableList) {
@@ -33,10 +36,14 @@ public class TablesAndRecords extends JPanel {
 		return (String) list.getSelectedValue();
 	}
 
-	@SuppressWarnings("serial")
 	public void setTableContent(Vector<String> columnHeaders,
 			Vector<Vector<String>> tableContent) {
 		contentTable = new JTable(tableContent, columnHeaders) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			public boolean getScrollableTracksViewportWidth() {
 				return getPreferredSize().width < getParent().getWidth();
 			}
@@ -49,6 +56,10 @@ public class TablesAndRecords extends JPanel {
 	public void tableListListener(ListSelectionListener listenForTableChoice) {
 		list.addListSelectionListener(listenForTableChoice);
 	}
+	
+	public void backButtonListener(ActionListener ListenForBackButton) {
+		backButton.addActionListener(ListenForBackButton);
+	}
 
 	public void displayError(String message) {
 		JOptionPane.showMessageDialog(this, message);
@@ -56,6 +67,14 @@ public class TablesAndRecords extends JPanel {
 
 	public void setSelectedIndex(int a) {
 		list.setSelectedIndex(a);
+	}
+	
+	private void setTopPanel(){
+		JPanel topPanel = new JPanel(new BorderLayout());
+		backButton = new JButton("<--");
+		backButton.setPreferredSize(new Dimension(100,30));
+		topPanel.add(backButton,BorderLayout.WEST);
+		add(topPanel,BorderLayout.NORTH);
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -65,4 +84,5 @@ public class TablesAndRecords extends JPanel {
 	private JSplitPane splitPane;
 	private JList<String> list;
 	private DefaultListModel<String> tableList;
+	private JButton backButton;
 }

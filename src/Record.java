@@ -10,7 +10,7 @@ public class Record
         this.con = con;
     }
 
-    void addRecord(String tableName, Map<String,String> columnsAndValues)
+    void addRecord(String tableName, LinkedHashMap<String,String> columnsAndValues)
         throws SQLException
     {
         Iterator<String> it1 = columnsAndValues.keySet().iterator();
@@ -39,7 +39,7 @@ public class Record
         con.close();
     }
 
-    void removeRecord(String tableName, Map<String,String> columnsAndValues)
+    void removeRecord(String tableName, LinkedHashMap<String,String> columnsAndValues)
         throws SQLException
     {
         Iterator<String> it = columnsAndValues.keySet().iterator();

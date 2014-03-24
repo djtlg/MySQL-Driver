@@ -1,14 +1,15 @@
 import java.awt.CardLayout;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.JMenuBar;
@@ -38,10 +39,22 @@ public class GUI extends JFrame {
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
+					// Set System L&F
+					UIManager.setLookAndFeel(UIManager
+							.getSystemLookAndFeelClassName());
 					GUI frame = new GUI();
 					frame.setVisible(true);
+				} catch (UnsupportedLookAndFeelException e) {
+					// handle exception
+				} catch (ClassNotFoundException e) {
+					// handle exception
+				} catch (InstantiationException e) {
+					// handle exception
+				} catch (IllegalAccessException e) {
+					// handle exception
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -65,6 +78,7 @@ public class GUI extends JFrame {
 		dbSelector.cancelButtonListener(new CancelButtonListener());
 		tablesAndRecords = new TablesAndRecords();
 		tablesAndRecords.tableListListener(new TableListListener());
+		tablesAndRecords.backButtonListener(new BackButtonListener());
 		contentPane.add(login, "login");
 		contentPane.add(dbSelector, "dbSelector");
 		contentPane.add(tablesAndRecords, "tablesAndRecords");
@@ -110,6 +124,7 @@ public class GUI extends JFrame {
 
 	private class MenuBarActionListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getSource() == addDatabase) {
 				try {
@@ -150,13 +165,16 @@ public class GUI extends JFrame {
 				}
 			}
 			if (arg0.getSource() == addTable) {
-				JDialog dialog = new JDialog();
-				dialog.setContentPane(new AddTableScreen());
-				dialog.setSize(400, 300);
-				;
-				dialog.setLocationRelativeTo(null);
-				dialog.pack();
-				dialog.setVisible(true);
+				try {
+					AddTableDialog addTableDialog = new AddTableDialog();
+					// Create new table in database.
+					table.addTable(addTableDialog.getTableName(),
+							addTableDialog.getColumnNamesAndTypes());
+					// Refresh the table list in the view.
+					tablesAndRecords.setTableList(table.getTables());
+				} catch (SQLException e) {
+					tablesAndRecords.displayError(e.getMessage());
+				}
 			}
 			if (arg0.getSource() == removeTable) {
 				try {
@@ -178,6 +196,7 @@ public class GUI extends JFrame {
 				}
 			}
 			if (arg0.getSource() == createQuery) {
+				System.out.println(JOptionPane.showInputDialog("Enter sth"));
 				System.out.println("Create Query");
 			}
 		}
@@ -186,6 +205,7 @@ public class GUI extends JFrame {
 
 	private class LoginListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
 				host = login.getHost();
@@ -207,6 +227,7 @@ public class GUI extends JFrame {
 
 	private class NextButtonListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
 				database.selectDB(dbSelector.getSelection());
@@ -214,7 +235,7 @@ public class GUI extends JFrame {
 				tablesAndRecords.setTableList(table.getTables());
 				layout.show(contentPane, "tablesAndRecords");
 				// maximize the window
-				setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+				setExtendedState(getExtendedState() | Frame.MAXIMIZED_BOTH);
 				createEditMenuInTablesAndRecords();
 				createAdvancedMenu();
 			} catch (SQLException e) {
@@ -225,6 +246,7 @@ public class GUI extends JFrame {
 
 	private class CancelButtonListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			host = null;
 			port = null;
@@ -239,8 +261,17 @@ public class GUI extends JFrame {
 
 	}
 
+	private class BackButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			layout.show(contentPane, "dbSelector");
+		}
+	}
+
 	private class TableListListener implements ListSelectionListener {
 
+		@Override
 		public void valueChanged(ListSelectionEvent arg0) {
 			if (tablesAndRecords.getTableChoice() != null) {
 				record = new Record(con);
