@@ -36,7 +36,7 @@ public class GUI extends JFrame {
 	private JMenuBar menuBar;
 	private JMenu edit, advanced;
 	private JMenuItem addDatabase, removeDatabase, addTable, removeTable,
-			createQuery;
+			addColumn, removeColumn, changeColumnType, createQuery;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -116,6 +116,17 @@ public class GUI extends JFrame {
 		removeTable = new JMenuItem("Remove Table");
 		removeTable.addActionListener(new MenuBarActionListener());
 		edit.add(removeTable);
+		JMenu alterTable = new JMenu("Alter Table");
+		edit.add(alterTable);
+		addColumn = new JMenuItem("Add Column");
+		addColumn.addActionListener(new MenuBarActionListener());
+		alterTable.add(addColumn);
+		removeColumn = new JMenuItem("Remove Column");
+		removeColumn.addActionListener(new MenuBarActionListener());
+		alterTable.add(removeColumn);
+		changeColumnType = new JMenuItem("Change Column Type");
+		changeColumnType.addActionListener(new MenuBarActionListener());
+		alterTable.add(changeColumnType);
 	}
 
 	private void createAdvancedMenu() {
@@ -123,6 +134,20 @@ public class GUI extends JFrame {
 		createQuery = new JMenuItem("Create Query");
 		createQuery.addActionListener(new MenuBarActionListener());
 		advanced.add(createQuery);
+	}
+
+	private void resetDatabaseList() throws SQLException {
+		dbSelector.setDatabaseList(database.getDBs());
+	}
+
+	private void resetTableList() throws SQLException {
+		tablesAndRecords.setTableList(table.getTables());
+	}
+
+	private void resetRecordTable() throws SQLException {
+		tablesAndRecords.setTableContent(
+				table.getColumns(tablesAndRecords.getTableChoice()),
+				record.getAllRecords(tablesAndRecords.getTableChoice()));
 	}
 
 	private class MenuBarActionListener implements ActionListener {
@@ -141,7 +166,7 @@ public class GUI extends JFrame {
 						}
 					} while (newDbName.isEmpty());
 					database.addDB(newDbName);
-					dbSelector.setDatabaseList(database.getDBs());
+					resetDatabaseList();
 					JOptionPane.showMessageDialog(null, "Database \""
 							+ newDbName + "\" succesfully created.");
 				} catch (SQLException e) {
@@ -161,7 +186,7 @@ public class GUI extends JFrame {
 									+ "\nAre you sure?", "WARNING",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 						database.removeDB(dbSelector.getSelection());
-						dbSelector.setDatabaseList(database.getDBs());
+						resetDatabaseList();
 					}
 				} catch (SQLException e) {
 					dbSelector.displayError(e.getMessage());
@@ -174,7 +199,7 @@ public class GUI extends JFrame {
 					table.addTable(addTableDialog.getTableName(),
 							addTableDialog.getColumnNamesAndTypes());
 					// Refresh the table list in the view.
-					tablesAndRecords.setTableList(table.getTables());
+					resetTableList();
 				} catch (SQLException e) {
 					tablesAndRecords.displayError(e.getMessage());
 				}
@@ -192,11 +217,48 @@ public class GUI extends JFrame {
 									+ "\nAre you sure?", "WARNING",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 						table.removeTable(tablesAndRecords.getTableChoice());
-						tablesAndRecords.setTableList(table.getTables());
+						resetTableList();
 					}
 				} catch (SQLException e) {
 					tablesAndRecords.displayError(e.getMessage());
 				}
+			}
+			if (arg0.getSource() == addColumn) {
+				try {
+					AddNewColumnDialog addNewColumn = new AddNewColumnDialog();
+					if (tablesAndRecords.getTableChoice() == null)
+						JOptionPane.showMessageDialog(null,
+								"Please select a table", "Error ...",
+								JOptionPane.ERROR_MESSAGE);
+					else {
+						table.addColumn(tablesAndRecords.getTableChoice(),
+								addNewColumn.getColumnNamesAndTypes());
+						resetRecordTable();
+					}
+				} catch (SQLException e) {
+					tablesAndRecords.displayError(e.getMessage());
+				}
+			}
+			if (arg0.getSource() == removeColumn) {
+				try {
+					RemoveColumnDialog removeColumn = new RemoveColumnDialog(
+							table.getColumns(tablesAndRecords.getTableChoice()));
+					if (tablesAndRecords.getTableChoice() == null)
+						JOptionPane.showMessageDialog(null,
+								"Please select a table", "Error ...",
+								JOptionPane.ERROR_MESSAGE);
+					else {
+						table.removeColumn(tablesAndRecords.getTableChoice(),
+								removeColumn.getToBeRemovedList());
+						resetRecordTable();
+					}
+				} catch (SQLException e) {
+					tablesAndRecords.displayError(e.getMessage());
+				}
+			}
+			if (arg0.getSource() == changeColumnType) {
+				//TODO
+				System.out.println("Change Column Type");
 			}
 			if (arg0.getSource() == createQuery) {
 				try {

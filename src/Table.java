@@ -16,16 +16,16 @@ public class Table {
 			String sql = (new StringBuilder("create table ")).append(tableName)
 					.append(" (").toString();
 			while (it.hasNext()) {
-				String columnName = (String) it.next();
+				String columnName = it.next();
 				if (it.hasNext())
 					sql = (new StringBuilder(String.valueOf(sql)))
 							.append(columnName).append(" ")
-							.append((String) columns.get(columnName))
+							.append(columns.get(columnName))
 							.append(", ").toString();
 				else
 					sql = (new StringBuilder(String.valueOf(sql)))
 							.append(columnName).append(" ")
-							.append((String) columns.get(columnName))
+							.append(columns.get(columnName))
 							.toString();
 			}
 			sql = (new StringBuilder(String.valueOf(sql))).append(")")
@@ -58,16 +58,16 @@ public class Table {
 		String sql = (new StringBuilder("alter table ")).append(tableName)
 				.append(" add (").toString();
 		while (it.hasNext()) {
-			String columnName = (String) it.next();
+			String columnName = it.next();
 			if (it.hasNext())
 				sql = (new StringBuilder(String.valueOf(sql)))
 						.append(columnName).append(" ")
-						.append((String) columns.get(columnName)).append(", ")
+						.append(columns.get(columnName)).append(", ")
 						.toString();
 			else
 				sql = (new StringBuilder(String.valueOf(sql)))
 						.append(columnName).append(" ")
-						.append((String) columns.get(columnName)).toString();
+						.append(columns.get(columnName)).toString();
 		}
 		sql = (new StringBuilder(String.valueOf(sql))).append(")").toString();
 		stmt = con.createStatement();
@@ -78,41 +78,26 @@ public class Table {
 	void modifyColumn(String tableName, LinkedHashMap<String, String> columns)
 			throws SQLException {
 		Iterator<String> it = columns.keySet().iterator();
-		String sql = (new StringBuilder("alter table ")).append(tableName)
-				.append(" modify ").toString();
 		while (it.hasNext()) {
-			String columnName = (String) it.next();
-			if (it.hasNext())
-				sql = (new StringBuilder(String.valueOf(sql)))
-						.append(columnName).append(" ")
-						.append((String) columns.get(columnName)).append(", ")
-						.toString();
-			else
-				sql = (new StringBuilder(String.valueOf(sql)))
-						.append(columnName).append(" ")
-						.append((String) columns.get(columnName)).toString();
+			String columnName = it.next();
+			String sql = "Alter Table " + tableName + " modify column "
+					+ columnName + " " + columns.get(columnName);
+			stmt = con.createStatement();
+			stmt.executeUpdate(sql);
 		}
-		stmt = con.createStatement();
-		stmt.executeUpdate(sql);
 		stmt.close();
 	}
 
 	void removeColumn(String tableName, ArrayList<String> columns)
 			throws SQLException {
 		Iterator<String> it = columns.iterator();
-		String sql = (new StringBuilder("alter table ")).append(tableName)
-				.append(" drop column ").toString();
 		while (it.hasNext()) {
-			String columnName = (String) it.next();
-			if (it.hasNext())
-				sql = (new StringBuilder(String.valueOf(sql)))
-						.append(columnName).append(", ").toString();
-			else
-				sql = (new StringBuilder(String.valueOf(sql))).append(
-						columnName).toString();
+			String columnName = it.next();
+			String sql = "Alter Table " + tableName + " drop column "
+					+ columnName;
+			stmt = con.createStatement();
+			stmt.executeUpdate(sql);
 		}
-		stmt = con.createStatement();
-		stmt.executeUpdate(sql);
 		stmt.close();
 	}
 

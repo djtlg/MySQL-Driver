@@ -20,7 +20,7 @@ public class TablesAndRecords extends JPanel {
 		splitPane.setResizeWeight(0.2);
 		splitPane.setLeftComponent(tableListScrollPane);
 		add(splitPane, "Center");
-		setTopPanel();
+		setTopNavigationPanel();
 	}
 
 	public void setTableList(ArrayList<String> tableList) {
@@ -56,7 +56,7 @@ public class TablesAndRecords extends JPanel {
 	public void tableListListener(ListSelectionListener listenForTableChoice) {
 		list.addListSelectionListener(listenForTableChoice);
 	}
-	
+
 	public void backButtonListener(ActionListener ListenForBackButton) {
 		backButton.addActionListener(ListenForBackButton);
 	}
@@ -68,13 +68,13 @@ public class TablesAndRecords extends JPanel {
 	public void setSelectedIndex(int a) {
 		list.setSelectedIndex(a);
 	}
-	
-	private void setTopPanel(){
-		JPanel topPanel = new JPanel(new BorderLayout());
+
+	private void setTopNavigationPanel() {
+		JPanel topNavigationPanel = new JPanel(new BorderLayout());
 		backButton = new JButton("<--");
-		backButton.setPreferredSize(new Dimension(100,30));
-		topPanel.add(backButton,BorderLayout.WEST);
-		add(topPanel,BorderLayout.NORTH);
+		backButton.setPreferredSize(new Dimension(100, 30));
+		topNavigationPanel.add(backButton, BorderLayout.WEST);
+		add(topNavigationPanel, BorderLayout.NORTH);
 	}
 
 	private static final long serialVersionUID = 1L;

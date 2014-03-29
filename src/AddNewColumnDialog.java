@@ -11,17 +11,15 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
-public class AddTableDialog extends JDialog {
+public class AddNewColumnDialog extends JDialog {
 
 	/**
 	 * 
@@ -40,12 +38,11 @@ public class AddTableDialog extends JDialog {
 	private MyTableModel myTableModel;
 	private JScrollPane scrollPane;
 	private LinkedHashMap<String, String> results;
-	private JTextField tableName;
 
 	/**
 	 * Create the panel.
 	 */
-	public AddTableDialog() {
+	public AddNewColumnDialog() {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setSize(410, 330);
 		setLocationRelativeTo(null);
@@ -53,10 +50,6 @@ public class AddTableDialog extends JDialog {
 		setUpTablePanel();
 		setUpButtonPanel();
 		setVisible(true);
-	}
-
-	public String getTableName() {
-		return tableName.getText();
 	}
 
 	public LinkedHashMap<String, String> getColumnNamesAndTypes() {
@@ -74,13 +67,6 @@ public class AddTableDialog extends JDialog {
 
 	private void setUpTablePanel() {
 		tablePanel = new JPanel(new BorderLayout(5, 5));
-		// Create the top panel for table name entry
-		JPanel tableNamePanel = new JPanel(new BorderLayout());
-		JLabel tableNameLabel = new JLabel("Table Name: ");
-		tableNamePanel.add(tableNameLabel, BorderLayout.WEST);
-		tableName = new JTextField();
-		tableNamePanel.add(tableName, BorderLayout.CENTER);
-		tablePanel.add(tableNamePanel, BorderLayout.NORTH);
 		// Create the table to get input
 		myTableModel = new MyTableModel();
 		dataTable = new JTable(myTableModel);
@@ -182,22 +168,8 @@ public class AddTableDialog extends JDialog {
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getSource() == ok) {
 				setResults();
-				// User hit Ok without Entering any data to the dialog.
-				if (results.isEmpty() && tableName.getText().isEmpty()) {
-					JOptionPane
-							.showMessageDialog(
-									null,
-									"Please Enter Table Name, Colum Names and Colum Types.",
-									"Error ...", JOptionPane.ERROR_MESSAGE);
-				}
-				// User hit OK without Entering a table name.
-				else if (tableName.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,
-							"Please Enter Table Name.", "Error ...",
-							JOptionPane.ERROR_MESSAGE);
-				}
 				// User hit OK without Entering any Column name and type.
-				else if (results.isEmpty()) {
+				if (results.isEmpty()) {
 					JOptionPane.showMessageDialog(null,
 							"Please Enter Colum Names and Colum Types.",
 							"Error ...", JOptionPane.ERROR_MESSAGE);

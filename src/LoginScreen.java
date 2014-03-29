@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 public class LoginScreen extends JPanel
 {
@@ -79,6 +80,7 @@ public class LoginScreen extends JPanel
         gbc_port.gridy = 4;
         add(port, gbc_port);
         port.setColumns(10);
+        setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{userName, passWord, host, port, loginButon}));
     }
 
     public String getUserName()
