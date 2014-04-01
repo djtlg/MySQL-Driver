@@ -343,6 +343,7 @@ public class GUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+//			System.out.println(arg0.getSource() == tablesAndRecords.);
 			layout.previous(contentPane);
 		}
 	}
@@ -363,7 +364,7 @@ public class GUI extends JFrame {
 					tablesAndRecords.displayError(e.getMessage());
 				}
 			} else {
-				tablesAndRecords.setTableContent(null, null);
+				//tablesAndRecords.setTableContent(null, null);
 			}
 		}
 	}
