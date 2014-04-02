@@ -39,7 +39,6 @@ public class Record {
 		sql = (new StringBuilder(String.valueOf(sql))).append(")").toString();
 		stmt = con.createStatement();
 		stmt.executeUpdate(sql);
-		con.close();
 	}
 
 	void removeRecord(String tableName,
@@ -51,7 +50,7 @@ public class Record {
 			String columnName = (String) it.next();
 			if (it.hasNext())
 				sql = (new StringBuilder(String.valueOf(sql)))
-						.append(columnName).append(" = ")
+						.append(columnName).append(" = \"")
 						.append((String) columnsAndValues.get(columnName))
 						.append("\"").append(" AND ").toString();
 			else
@@ -63,7 +62,6 @@ public class Record {
 		stmt = con.createStatement();
 		stmt.executeUpdate(sql);
 		stmt.close();
-		con.close();
 	}
 
 	Vector<Vector<String>> getAllRecords(String tableName) throws SQLException {
@@ -79,7 +77,6 @@ public class Record {
 				tmp.add(rs.getString(i));
 
 		}
-
 		rs.close();
 		stmt.close();
 		return records;

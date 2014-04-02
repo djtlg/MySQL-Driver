@@ -4,12 +4,15 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -93,8 +96,8 @@ public class TablesAndRecords extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				EDIT_BOXES.clear();
+				CHANGES.clear();
 				bottomPanel.revalidate();
 			}
 		});
@@ -105,8 +108,10 @@ public class TablesAndRecords extends JPanel {
 	private void setEditBoxes() {
 		// fill column names for textboxes at the bottom panel for insert,
 		// update,remove operations.
-		if(editBoxPanel != null) editBoxPanel.removeAll();
+		if (editBoxPanel != null)
+			editBoxPanel.removeAll();
 		EDIT_BOXES.clear();
+		CHANGES.clear();
 		for (int i = 0; i < contentTable.getColumnCount(); i++) {
 			EDIT_BOXES.put(contentTable.getColumnName(i), new JTextField());
 		}
@@ -125,6 +130,16 @@ public class TablesAndRecords extends JPanel {
 		bottomPanel.revalidate();
 	}
 
+	public LinkedHashMap<String, String> getRecordDetail() {
+		LinkedHashMap<String, String> tmp = new LinkedHashMap<String, String>();
+		Iterator<String> it = EDIT_BOXES.keySet().iterator();
+		while (it.hasNext()) {
+			String columnName = it.next();
+			tmp.put(columnName, EDIT_BOXES.get(columnName).getText());
+		}
+		return tmp;
+	}
+
 	private void setHorizontalSplitPane() {
 		verticalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		verticalSplitPane.setResizeWeight(0.8);
@@ -133,24 +148,19 @@ public class TablesAndRecords extends JPanel {
 		bottomPanel = new JPanel(new BorderLayout());
 		verticalSplitPane.setBottomComponent(bottomPanel);
 		// Panel where insert, update and remove buttons reside.
-		JPanel bottomButtonPanel = new JPanel(new GridLayout(3, 1));
+		JPanel bottomButtonPanel = new JPanel(new GridLayout(4, 1));
 		updateButton = new JButton("Update");
-		updateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				for (int i = 0; i < contentTable.getColumnCount(); i++) {
-					System.out.println(EDIT_BOXES.get(contentTable.getColumnName(i)).getText());
-				}
-				System.out.println("-------------------");
-			}
-		});
-		insertButton = new JButton("Insert");
-		removeButton = new JButton("Remove");
+		updateButton.addActionListener(new ButtonListener());
 		bottomButtonPanel.add(updateButton);
+		insertButton = new JButton("Insert");
+		insertButton.addActionListener(new ButtonListener());
 		bottomButtonPanel.add(insertButton);
+		removeButton = new JButton("Remove");
+		removeButton.addActionListener(new ButtonListener());
 		bottomButtonPanel.add(removeButton);
+		resetButton = new JButton("Reset");
+		resetButton.addActionListener(new ButtonListener());
+		bottomButtonPanel.add(resetButton);
 		bottomPanel.add(bottomButtonPanel, BorderLayout.EAST);
 		add(verticalSplitPane, "Center");
 	}
@@ -166,6 +176,35 @@ public class TablesAndRecords extends JPanel {
 		horizontalSplitPane.setLeftComponent(tableListScrollPane);
 	}
 
+	public void insertButtontListener(ActionListener listenForInsertButton) {
+		insertButton.addActionListener(listenForInsertButton);
+	}
+
+	public void removeButtontListener(ActionListener listenForRemoveButton) {
+		removeButton.addActionListener(listenForRemoveButton);
+	}
+
+	private class ButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if (e.getSource() == updateButton) {
+				for (int i = 0; i < contentTable.getColumnCount(); i++) {
+					System.out.println(EDIT_BOXES.get(
+							contentTable.getColumnName(i)).getText());
+				}
+				System.out.println("-------------------");
+			}
+			if (e.getSource() == resetButton) {
+				for (int i = 0; i < contentTable.getColumnCount(); i++) {
+					EDIT_BOXES.get(contentTable.getColumnName(i)).setText(null);
+				}
+			}
+		}
+
+	}
+
 	private static final long serialVersionUID = 1L;
 	private JTable contentTable;
 	private JScrollPane tableListScrollPane;
@@ -178,7 +217,9 @@ public class TablesAndRecords extends JPanel {
 	private JButton updateButton;
 	private JButton removeButton;
 	private JButton insertButton;
+	private JButton resetButton;
 	private LinkedHashMap<String, JTextField> EDIT_BOXES = new LinkedHashMap<String, JTextField>();
+	private LinkedHashMap<String, JTextField> CHANGES = new LinkedHashMap<String, JTextField>();
 	private JPanel bottomPanel;
 	private JPanel editBoxPanel;
 }

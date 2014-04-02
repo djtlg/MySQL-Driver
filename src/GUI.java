@@ -80,6 +80,8 @@ public class GUI extends JFrame {
 		tablesAndRecords = new TablesAndRecords();
 		tablesAndRecords.tableListListener(new TableListListener());
 		tablesAndRecords.backButtonListener(new BackButtonListener());
+		tablesAndRecords.insertButtontListener(new InsertButtonListener());
+		tablesAndRecords.removeButtontListener(new RemoveButtonListener());
 		queryDisplay = new QueryDisplay();
 		contentPane.add(login, "login");
 		contentPane.add(dbSelector, "dbSelector");
@@ -257,7 +259,7 @@ public class GUI extends JFrame {
 				}
 			}
 			if (arg0.getSource() == changeColumnType) {
-				//TODO
+				// TODO
 				System.out.println("Change Column Type");
 			}
 			if (arg0.getSource() == createQuery) {
@@ -343,9 +345,45 @@ public class GUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-//			System.out.println(arg0.getSource() == tablesAndRecords.);
 			layout.previous(contentPane);
 		}
+	}
+
+	private class InsertButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				record.addRecord(tablesAndRecords.getTableChoice(),
+						tablesAndRecords.getRecordDetail());
+				tablesAndRecords
+						.setTableContent(table.getColumns(tablesAndRecords
+								.getTableChoice()), record
+								.getAllRecords(tablesAndRecords
+										.getTableChoice()));
+			} catch (SQLException e) {
+				tablesAndRecords.displayError(e.getMessage());
+			}
+		}
+	}
+
+	private class RemoveButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				record.removeRecord(tablesAndRecords.getTableChoice(),
+						tablesAndRecords.getRecordDetail());
+				tablesAndRecords
+						.setTableContent(table.getColumns(tablesAndRecords
+								.getTableChoice()), record
+								.getAllRecords(tablesAndRecords
+										.getTableChoice()));
+			} catch (SQLException e) {
+				tablesAndRecords.displayError(e.getMessage());
+			}
+		}
+
 	}
 
 	private class TableListListener implements ListSelectionListener {
@@ -363,8 +401,6 @@ public class GUI extends JFrame {
 				} catch (SQLException e) {
 					tablesAndRecords.displayError(e.getMessage());
 				}
-			} else {
-				//tablesAndRecords.setTableContent(null, null);
 			}
 		}
 	}
