@@ -7,12 +7,15 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 
 public class QueryDisplay extends JPanel {
 
 	private JTable queryContent;
 	private JButton backButton;
+	private JScrollPane scrollPane;
+	private DefaultTableModel tableModel;
 	
 	/**
 	 * 
@@ -29,10 +32,7 @@ public class QueryDisplay extends JPanel {
 		backButton.setPreferredSize(new Dimension(100,30));
 		topPanel.add(backButton,BorderLayout.WEST);
 		add(topPanel,BorderLayout.NORTH);
-	}
-	
-	public void setContent(Vector<String> columnNames, Vector<Vector<String>> columnData){
-		queryContent = new JTable(columnData, columnNames) {
+		queryContent = new JTable() {
 			/**
 			 * 
 			 */
@@ -43,8 +43,13 @@ public class QueryDisplay extends JPanel {
 			}
 		};
 		queryContent.setAutoResizeMode(0);
-		JScrollPane scrollPane = new JScrollPane(queryContent);
+		scrollPane = new JScrollPane(queryContent);
 		add(scrollPane,BorderLayout.CENTER);
+	}
+	
+	public void setContent(Vector<String> columnNames, Vector<Vector<String>> columnData){
+		tableModel = new DefaultTableModel(columnData, columnNames);
+		queryContent.setModel(tableModel);
 	}
 	public void backButtonListener(ActionListener ListenForBackButton) {
 		backButton.addActionListener(ListenForBackButton);

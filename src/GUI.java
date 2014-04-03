@@ -147,9 +147,12 @@ public class GUI extends JFrame {
 	}
 
 	private void resetRecordTable() throws SQLException {
+		if(tablesAndRecords.getTableChoice() != null){
 		tablesAndRecords.setTableContent(
 				table.getColumns(tablesAndRecords.getTableChoice()),
 				record.getAllRecords(tablesAndRecords.getTableChoice()));
+		}
+		else tablesAndRecords.setTableContent(null, null);
 	}
 
 	private class MenuBarActionListener implements ActionListener {
@@ -220,6 +223,7 @@ public class GUI extends JFrame {
 							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 						table.removeTable(tablesAndRecords.getTableChoice());
 						resetTableList();
+						resetRecordTable();
 					}
 				} catch (SQLException e) {
 					tablesAndRecords.displayError(e.getMessage());
@@ -271,7 +275,7 @@ public class GUI extends JFrame {
 						queryDisplay.setContent(query.getQueryColumnNames(),
 								query.getQueryResults());
 						queryDisplay
-								.backButtonListener(new BackButtonListener());
+								.backButtonListener(new QueryBackButtonListener());
 						layout.show(contentPane, "queryDisplay");
 					}
 				} catch (SQLException e) {
@@ -345,8 +349,21 @@ public class GUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			layout.previous(contentPane);
+			table = null;
+			menuBar.removeAll();
+			createDbSelectorEditMenu();
+			layout.show(contentPane, "dbSelector");
 		}
+	}
+	
+	private class QueryBackButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			layout.show(contentPane, "tablesAndRecords");
+			
+		}
+		
 	}
 
 	private class InsertButtonListener implements ActionListener {
