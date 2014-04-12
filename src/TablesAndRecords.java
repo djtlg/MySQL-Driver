@@ -13,6 +13,14 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+/**
+ * 
+ * @author Tolga ILDIZ, Volkan ALCIN
+ * 
+ *         TablesAndRecord class displays the list of tables in a database and
+ *         the data of the table that is chosen by the user.
+ * 
+ */
 public class TablesAndRecords extends JPanel {
 
 	public TablesAndRecords() {
@@ -22,6 +30,12 @@ public class TablesAndRecords extends JPanel {
 		setHorizontalSplitPane();
 	}
 
+	/**
+	 * Loads the JList with the names of the tables in the database.
+	 * 
+	 * @param tableList
+	 *            An ArrayList that contains the names of the tables.
+	 */
 	public void setTableList(ArrayList<String> tableList) {
 		this.tableList.removeAllElements();
 		tableList.trimToSize();
@@ -31,10 +45,23 @@ public class TablesAndRecords extends JPanel {
 		list.setSelectedIndex(0);
 	}
 
+	/**
+	 * Returns the user table choice from the table list.
+	 * 
+	 * @return A string that contains the name of the table that user chose.
+	 */
 	public String getTableChoice() {
 		return (String) list.getSelectedValue();
 	}
 
+	/**
+	 * Loads the table that displays the column names and the column data.
+	 * 
+	 * @param columnHeaders
+	 *            A Vector that contains the names of the columns in the table.
+	 * @param tableContent
+	 *            A Vector that contains the data of the table.
+	 */
 	public void setTableContent(Vector<String> columnHeaders,
 			Vector<Vector<String>> tableContent) {
 		contentTable = new JTable(tableContent, columnHeaders) {
@@ -69,22 +96,46 @@ public class TablesAndRecords extends JPanel {
 		setEditBoxes();
 	}
 
+	/**
+	 * Provides a link to the table list to add an ActionListener
+	 * 
+	 * @param listenForTableChoice
+	 */
 	public void tableListListener(ListSelectionListener listenForTableChoice) {
 		list.addListSelectionListener(listenForTableChoice);
 	}
 
+	/**
+	 * Provides a link to the back button to add an ActionListener
+	 * 
+	 * @param ListenForBackButton
+	 */
 	public void backButtonListener(ActionListener ListenForBackButton) {
 		backButton.addActionListener(ListenForBackButton);
 	}
 
+	/**
+	 * Creates and displays a dialog in case of errors.
+	 * 
+	 * @param message
+	 *            The message the user will see.
+	 */
 	public void displayError(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
 
-	public void setSelectedIndex(int a) {
-		list.setSelectedIndex(a);
+	/**
+	 * Sets the selection of the table list.
+	 * 
+	 * @param index
+	 */
+	public void setSelectedIndex(int index) {
+		list.setSelectedIndex(index);
 	}
 
+	/**
+	 * Creates a JPanel that contains the back button and adds it to the frame.
+	 */
 	private void setTopNavigationPanel() {
 		JPanel topNavigationPanel = new JPanel(new BorderLayout());
 		backButton = new JButton("<--");
@@ -102,6 +153,11 @@ public class TablesAndRecords extends JPanel {
 		add(topNavigationPanel, BorderLayout.NORTH);
 	}
 
+	/**
+	 * Creates a JPanel that contains a number of JTextFields and adds it to the
+	 * frame. The JTextBoxes is filled with data when user chose a row on the
+	 * table.
+	 */
 	private void setEditBoxes() {
 		// fill column names for textboxes at the bottom panel for insert,
 		// update,remove operations.
@@ -127,6 +183,12 @@ public class TablesAndRecords extends JPanel {
 		bottomPanel.revalidate();
 	}
 
+	/**
+	 * Returns the data that is entered to the TextBoxes at the bottom of the
+	 * frame.
+	 * 
+	 * @return A LinkedHashMat that contains the column names and column data.
+	 */
 	public LinkedHashMap<String, String> getRecordDetail() {
 		LinkedHashMap<String, String> tmp = new LinkedHashMap<String, String>();
 		Iterator<String> it = EDIT_BOXES.keySet().iterator();
@@ -137,6 +199,9 @@ public class TablesAndRecords extends JPanel {
 		return tmp;
 	}
 
+	/**
+	 * Sets up the horizontal split pane.
+	 */
 	private void setHorizontalSplitPane() {
 		verticalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		verticalSplitPane.setResizeWeight(0.8);
@@ -162,6 +227,9 @@ public class TablesAndRecords extends JPanel {
 		add(verticalSplitPane, "Center");
 	}
 
+	/**
+	 * Sets up the vertical split pane.
+	 */
 	private void setVerticalSplitPane() {
 		tableList = new DefaultListModel<String>();
 		list = new JList<String>(tableList);
@@ -173,14 +241,28 @@ public class TablesAndRecords extends JPanel {
 		horizontalSplitPane.setLeftComponent(tableListScrollPane);
 	}
 
+	/**
+	 * Link for the JButton "insert" for adding actionListener.
+	 * 
+	 * @param listenForInsertButton
+	 */
 	public void insertButtontListener(ActionListener listenForInsertButton) {
 		insertButton.addActionListener(listenForInsertButton);
 	}
 
+	/**
+	 * Link for the JButton "remove" for adding actionListener.
+	 * 
+	 * @param listenForRemoveButton
+	 */
 	public void removeButtontListener(ActionListener listenForRemoveButton) {
 		removeButton.addActionListener(listenForRemoveButton);
 	}
 
+	/**
+	 * Listens for the user clicks on "update" and "reset" buttons and reacts
+	 * accordingly.
+	 */
 	private class ButtonListener implements ActionListener {
 
 		@Override

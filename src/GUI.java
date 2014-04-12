@@ -16,6 +16,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 
+/**
+ * 
+ * @author Tolga ILDIZ, Volkan ALCIN
+ * 
+ *         GUI class is the controller of the whole program.
+ * 
+ */
 public class GUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -91,6 +98,9 @@ public class GUI extends JFrame {
 		layout.show(contentPane, "login");
 	}
 
+	/**
+	 * Creates the menu at the top.
+	 */
 	private void createMenuBar() {
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -98,6 +108,9 @@ public class GUI extends JFrame {
 		advanced = new JMenu("Advanced");
 	}
 
+	/**
+	 * Creates the edit menu that is displayed on the database selection screen.
+	 */
 	private void createDbSelectorEditMenu() {
 		edit.removeAll();
 		menuBar.add(edit);
@@ -107,8 +120,12 @@ public class GUI extends JFrame {
 		removeDatabase = new JMenuItem("Remove Database");
 		removeDatabase.addActionListener(new MenuBarActionListener());
 		edit.add(removeDatabase);
+
 	}
 
+	/**
+	 * Creates the edit menu that is displayed on the tables and records screen.
+	 */
 	private void createEditMenuInTablesAndRecords() {
 		edit.removeAll();
 		menuBar.add(edit);
@@ -131,6 +148,9 @@ public class GUI extends JFrame {
 		alterTable.add(changeColumnType);
 	}
 
+	/**
+	 * Creates the advanced menu.
+	 */
 	private void createAdvancedMenu() {
 		menuBar.add(advanced);
 		createQuery = new JMenuItem("Create Query");
@@ -138,14 +158,29 @@ public class GUI extends JFrame {
 		advanced.add(createQuery);
 	}
 
+	/**
+	 * Resets the database list.
+	 * 
+	 * @throws SQLException
+	 */
 	private void resetDatabaseList() throws SQLException {
 		dbSelector.setDatabaseList(database.getDBs());
 	}
 
+	/**
+	 * Resets the table list.
+	 * 
+	 * @throws SQLException
+	 */
 	private void resetTableList() throws SQLException {
 		tablesAndRecords.setTableList(table.getTables());
 	}
 
+	/**
+	 * Resets the table that holds the records.
+	 * 
+	 * @throws SQLException
+	 */
 	private void resetRecordTable() throws SQLException {
 		if (tablesAndRecords.getTableChoice() != null) {
 			tablesAndRecords.setTableContent(
@@ -155,6 +190,9 @@ public class GUI extends JFrame {
 			tablesAndRecords.setTableContent(null, null);
 	}
 
+	/**
+	 * Listens for the menu bar clicks and acts accordingly.
+	 */
 	private class MenuBarActionListener implements ActionListener {
 
 		@Override
@@ -286,6 +324,10 @@ public class GUI extends JFrame {
 
 	}
 
+	/**
+	 * Listen for the login button to be clicked on login screen and acts
+	 * accordingly.
+	 */
 	private class LoginListener implements ActionListener {
 
 		@Override
@@ -308,6 +350,9 @@ public class GUI extends JFrame {
 
 	}
 
+	/**
+	 * Listens for the next button on the database selection screen.
+	 */
 	private class NextButtonListener implements ActionListener {
 
 		@Override
@@ -327,6 +372,9 @@ public class GUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Listens for the cancel button on the database selection screen.
+	 */
 	private class CancelButtonListener implements ActionListener {
 
 		@Override
@@ -345,6 +393,9 @@ public class GUI extends JFrame {
 
 	}
 
+	/**
+	 * Listens for the back button on the tables and records screen.
+	 */
 	private class BackButtonListener implements ActionListener {
 
 		@Override
@@ -358,6 +409,9 @@ public class GUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Listens for the back button on the query display screen.
+	 */
 	private class QueryBackButtonListener implements ActionListener {
 
 		@Override
@@ -369,6 +423,9 @@ public class GUI extends JFrame {
 
 	}
 
+	/**
+	 * Listens for the insert button on the tables and records screen.
+	 */
 	private class InsertButtonListener implements ActionListener {
 
 		@Override
@@ -387,6 +444,9 @@ public class GUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Listens for the remove button on the tables and records screen.
+	 */
 	private class RemoveButtonListener implements ActionListener {
 
 		@Override
@@ -406,6 +466,9 @@ public class GUI extends JFrame {
 
 	}
 
+	/**
+	 * Listens for the table list selection changes.
+	 */
 	private class TableListListener implements ListSelectionListener {
 
 		@Override

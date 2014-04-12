@@ -17,11 +17,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+/**
+ * 
+ * @author Tolga ILDIZ, Volkan Alcin
+ * 
+ *         RemoveColumn class creates a dialog to interact with the user so the
+ *         user can remove columns from an existing SQL table.
+ * 
+ */
 public class RemoveColumnDialog extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JButton ok;
 	private JButton cancel;
@@ -44,10 +49,20 @@ public class RemoveColumnDialog extends JDialog {
 		setVisible(true);
 	}
 
+	/**
+	 * Returns the columns that is going to be removed from the database.
+	 * 
+	 * @return An ArrayList that contains the names of the columns that will be
+	 *         removed.
+	 */
 	public ArrayList<String> getToBeRemovedList() {
 		return toBeRemoved;
 	}
 
+	/**
+	 * Creates a JPanel that will contain the column list and encloses it in a
+	 * JScrollPanel and add it to the Frame.
+	 */
 	private void setUpListPanel() {
 		listPanel = new JPanel(new BorderLayout(5, 5));
 		// Align text to center.
@@ -68,6 +83,10 @@ public class RemoveColumnDialog extends JDialog {
 		getContentPane().add(listPanel);
 	}
 
+	/**
+	 * Creates a JPanel that will contain add and cancel buttons and adds it to
+	 * the frame.
+	 */
 	private void setUpButtonPanel() {
 		JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
 		ok = new JButton("OK");
@@ -80,6 +99,9 @@ public class RemoveColumnDialog extends JDialog {
 		getContentPane().add(buttonPanel);
 	}
 
+	/**
+	 * Listens for the user clicks on and cancel buttons and reacts accordingly.
+	 */
 	private class ButtonListener implements ActionListener {
 
 		@Override

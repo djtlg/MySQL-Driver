@@ -3,6 +3,13 @@ import java.sql.SQLException;
 import java.util.Vector;
 import java.sql.*;
 
+/**
+ * 
+ * @author Tolga ILDIZ, Volkan ALCIN
+ * 
+ *         Query class handles the operatins that is related to custom queries.
+ * 
+ */
 public class Query {
 
 	private Connection con;
@@ -15,6 +22,13 @@ public class Query {
 		stmt = null;
 	}
 
+	/**
+	 * Creates a query to be run on the database.
+	 * 
+	 * @param query
+	 *            The custom query that user wants to run on the database.
+	 * @throws SQLException
+	 */
 	void createQuery(String query) throws SQLException {
 		queryResults = new Vector<Vector<String>>();
 		queryColumnNames = new Vector<String>();
@@ -33,10 +47,20 @@ public class Query {
 		stmt.close();
 	}
 
+	/**
+	 * Returns the results of the custom query.
+	 * 
+	 * @return A vector that contains the results of the query.
+	 */
 	Vector<Vector<String>> getQueryResults() {
 		return queryResults;
 	}
 
+	/**
+	 * The names of the columns that is used in the query.
+	 * 
+	 * @return A vector that contains the column names for the custom query.
+	 */
 	Vector<String> getQueryColumnNames() {
 		return queryColumnNames;
 	}

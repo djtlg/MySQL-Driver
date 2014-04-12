@@ -3,6 +3,15 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * 
+ * @author Tolga ILDIZ, Volkan ALCIN
+ * 
+ *         DatabaseSelection class displays the databases that is on the host
+ *         and the user has access to and lets the user to chose the one that
+ *         the user wants to work on.
+ * 
+ */
 public class DatabaseSelection extends JPanel {
 
 	public DatabaseSelection() {
@@ -14,6 +23,10 @@ public class DatabaseSelection extends JPanel {
 		addCancelButton();
 	}
 
+	/**
+	 * Creates an empty JList encloses it in an JScrollPane and adds it to the
+	 * Frame.
+	 */
 	private void addListBox() {
 		databaseList = new DefaultListModel<String>();
 		lblNewLabel = new JLabel("Databases");
@@ -34,9 +47,12 @@ public class DatabaseSelection extends JPanel {
 		listConstraints.gridwidth = 2;
 		listConstraints.insets.set(0, 0, 5, 0);
 		JScrollPane scrollPane = new JScrollPane(list);
-		add(scrollPane,listConstraints);
+		add(scrollPane, listConstraints);
 	}
 
+	/**
+	 * Creates an JButton for the "Next" and adds it to the Frame.
+	 */
 	private void addNextButton() {
 		nextButton = new JButton("Next");
 		GridBagConstraints nextButtonConstraints = new GridBagConstraints();
@@ -48,6 +64,9 @@ public class DatabaseSelection extends JPanel {
 		add(nextButton, nextButtonConstraints);
 	}
 
+	/**
+	 * Creates an JButton for the "Cancel" and adds it to the Frame.
+	 */
 	private void addCancelButton() {
 		cancelButton = new JButton("Cancel");
 		GridBagConstraints cancelButtonConstraints = new GridBagConstraints();
@@ -59,6 +78,12 @@ public class DatabaseSelection extends JPanel {
 		add(cancelButton, cancelButtonConstraints);
 	}
 
+	/**
+	 * Fills the empty Jlist with the contents of the databaseList.
+	 * 
+	 * @param databaseList
+	 *            The names of the databases that is on the host.
+	 */
 	public void setDatabaseList(ArrayList<String> databaseList) {
 		this.databaseList.removeAllElements();
 		databaseList.trimToSize();
@@ -67,18 +92,39 @@ public class DatabaseSelection extends JPanel {
 		list.setModel(this.databaseList);
 	}
 
+	/**
+	 * Returns the users selection.
+	 * 
+	 * @return the name of the database that user selected.
+	 */
 	public String getSelection() {
 		return (String) list.getSelectedValue();
 	}
 
+	/**
+	 * Link for the JButton "Next" for adding actionListener.
+	 * 
+	 * @param listenForNextButton
+	 */
 	public void nextButtonListener(ActionListener listenForNextButton) {
 		nextButton.addActionListener(listenForNextButton);
 	}
 
+	/**
+	 * Link for the JButton "Cancel" for adding actionListener.
+	 * 
+	 * @param listenForCancelButton
+	 */
 	public void cancelButtonListener(ActionListener listenForCancelButton) {
 		cancelButton.addActionListener(listenForCancelButton);
 	}
 
+	/**
+	 * Creates and displays a dialog in case of errors.
+	 * 
+	 * @param message
+	 *            The message the user will see.
+	 */
 	public void displayError(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
@@ -86,7 +132,6 @@ public class DatabaseSelection extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JList<String> list;
 	private DefaultListModel<String> databaseList;
-	// private JScrollPane databaseListContainer;
 	private JButton nextButton;
 	private JButton cancelButton;
 	private JLabel lblNewLabel;

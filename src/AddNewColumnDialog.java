@@ -19,11 +19,16 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
+/**
+ * 
+ * @author Tolga ILDIZ, Volkan Alcin
+ * 
+ *         AddNewColumnDialog class creates a dialog to interact with the user
+ *         so the user can add new columns to an existing SQL table.
+ * 
+ */
 public class AddNewColumnDialog extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private final String[] DATA_TYPES = { "INT", "TINYINT", "SMALLINT",
 			"MEDIUMINT", "BIGINT", "FLOAT", "DOUBLE", "DECIMAL", "DATE",
@@ -52,10 +57,20 @@ public class AddNewColumnDialog extends JDialog {
 		setVisible(true);
 	}
 
+	/**
+	 * This method returns LinkedHashMap loaded with the column names and their
+	 * types that the user entered.
+	 * 
+	 * @return <K,V> K - The name of the columns the user entered. V - The type
+	 *         of the column the user entered.
+	 */
 	public LinkedHashMap<String, String> getColumnNamesAndTypes() {
 		return results;
 	}
 
+	/**
+	 * Loads the user inputs in to the LinkedHashMap.
+	 */
 	private void setResults() {
 		results = new LinkedHashMap<String, String>();
 		for (int i = 0; i < dataTable.getModel().getRowCount(); i++) {
@@ -65,6 +80,10 @@ public class AddNewColumnDialog extends JDialog {
 		results.remove(null);
 	}
 
+	/**
+	 * Creates a JPanel that is consist of the Input table and the "+" button
+	 * that is beneath it and adds it to the content pane.
+	 */
 	private void setUpTablePanel() {
 		tablePanel = new JPanel(new BorderLayout(5, 5));
 		// Create the table to get input
@@ -76,7 +95,7 @@ public class AddNewColumnDialog extends JDialog {
 		dataTable.setFillsViewportHeight(true);
 		dataTable.setRowHeight(20);
 		scrollPane = new JScrollPane(dataTable);
-		setUpDataTypeColumn(dataTable, dataTable.getColumnModel().getColumn(1));
+		setUpDataTypeColumn(dataTable.getColumnModel().getColumn(1));
 		tablePanel.add(scrollPane, BorderLayout.CENTER);
 		// Adds 5 more row to add data.
 		moreRows = new JButton("+");
@@ -85,6 +104,10 @@ public class AddNewColumnDialog extends JDialog {
 		getContentPane().add(tablePanel);
 	}
 
+	/**
+	 * Creates a JPanel that is consist of the OK, Cancel and Reset buttons and
+	 * adds it to the content pane.
+	 */
 	private void setUpButtonPanel() {
 		JPanel buttonPanel = new JPanel(new GridLayout(3, 1));
 		ok = new JButton("OK");
@@ -101,17 +124,22 @@ public class AddNewColumnDialog extends JDialog {
 		getContentPane().add(buttonPanel);
 	}
 
-	private void setUpDataTypeColumn(JTable table, TableColumn sportColumn) {
+	/**
+	 * Sets up the column on the table that displays the data types as dropbox.
+	 * 
+	 * @param typeColumn
+	 */
+	private void setUpDataTypeColumn(TableColumn typeColumn) {
 		// Set up the editor for the sport cells.
 		JComboBox<String> comboBox = new JComboBox<String>(DATA_TYPES);
-		sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
+		typeColumn.setCellEditor(new DefaultCellEditor(comboBox));
 	}
 
+	/**
+	 * The custom table model that the table is based on.
+	 */
 	private class MyTableModel extends AbstractTableModel {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 		private final String[] COLUMN_NAMES = { "Column Name", "Column Type" };
 		private ArrayList<Object[]> data;
@@ -162,6 +190,10 @@ public class AddNewColumnDialog extends JDialog {
 		}
 	}
 
+	/**
+	 * Listens for the user clicks on ok, cancel, reset and "+" buttons and
+	 * reacts accordingly.
+	 */
 	private class ButtonListener implements ActionListener {
 
 		@Override
