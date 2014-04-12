@@ -351,6 +351,7 @@ public class GUI extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			table = null;
 			menuBar.removeAll();
+			advanced.removeAll();
 			menuBar.repaint();
 			createDbSelectorEditMenu();
 			layout.show(contentPane, "dbSelector");
@@ -361,6 +362,8 @@ public class GUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			menuBar.removeAll();
+			menuBar.repaint();
 			layout.show(contentPane, "tablesAndRecords");
 		}
 		
