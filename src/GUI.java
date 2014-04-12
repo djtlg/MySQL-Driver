@@ -147,12 +147,12 @@ public class GUI extends JFrame {
 	}
 
 	private void resetRecordTable() throws SQLException {
-		if(tablesAndRecords.getTableChoice() != null){
-		tablesAndRecords.setTableContent(
-				table.getColumns(tablesAndRecords.getTableChoice()),
-				record.getAllRecords(tablesAndRecords.getTableChoice()));
-		}
-		else tablesAndRecords.setTableContent(null, null);
+		if (tablesAndRecords.getTableChoice() != null) {
+			tablesAndRecords.setTableContent(
+					table.getColumns(tablesAndRecords.getTableChoice()),
+					record.getAllRecords(tablesAndRecords.getTableChoice()));
+		} else
+			tablesAndRecords.setTableContent(null, null);
 	}
 
 	private class MenuBarActionListener implements ActionListener {
@@ -357,8 +357,8 @@ public class GUI extends JFrame {
 			layout.show(contentPane, "dbSelector");
 		}
 	}
-	
-	private class QueryBackButtonListener implements ActionListener{
+
+	private class QueryBackButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -366,7 +366,7 @@ public class GUI extends JFrame {
 			menuBar.repaint();
 			layout.show(contentPane, "tablesAndRecords");
 		}
-		
+
 	}
 
 	private class InsertButtonListener implements ActionListener {
