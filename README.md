@@ -8,21 +8,21 @@ We assumed that the user who is interested in this project have enough knowledge
 
 Features
 As mentioned before the program is able to do almost all the basic operations that a user might require. It can,
-•	Connect to any MySQL database locally or on the cloud.
-•	Provide log in credentials to the MySQL database and get authenticated.
-•	Use multiple databases within the MySQL Host.
-•	Add new database to the MySQL host.
-•	Remove existing database from MySQL host.
-•	List Existing databases on the MySQL host.
-•	List tables in a database
-•	Add new tables to the database 
-•	Remove existing tables from the database
-•	Add new columns to an existing table
-•	Remove columns from existing tables
-•	Alter the columns name or the data type it has
-•	Enter new rows of data to an existing table 
-•	Remove rows from an existing table
-•	Update rows of an existing table.
+* Connect to any MySQL database locally or on the cloud.
+*	Provide log in credentials to the MySQL database and get authenticated.
+*	Use multiple databases within the MySQL Host.
+*	Add new database to the MySQL host.
+*	Remove existing database from MySQL host.
+*	List Existing databases on the MySQL host.
+*	List tables in a database
+*	Add new tables to the database 
+*	Remove existing tables from the database
+*	Add new columns to an existing table
+*	Remove columns from existing tables
+*	Alter the columns name or the data type it has
+*	Enter new rows of data to an existing table 
+*	Remove rows from an existing table
+*	Update rows of an existing table.
 It will also allow advanced users to type in their queries and display results accordingly.
 
 Limitations
